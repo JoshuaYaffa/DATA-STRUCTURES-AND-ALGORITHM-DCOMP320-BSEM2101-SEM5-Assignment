@@ -193,13 +193,19 @@ def process_file(input_path, output_path):
     """
     Read expressions from input_path, evaluate each one,
     and write results to output_path — preserving separators.
+
+    Writes to a temporary file first, then atomically replaces the
+    destination. This avoids "Permission denied" errors when the
+    destination file is open in an editor (e.g. PyCharm or VS Code).
     """
     if not os.path.exists(input_path):
         raise FileNotFoundError(f"Input file not found: {input_path}")
 
+    # ---- Read input ----
     with open(input_path, 'r', encoding='utf-8') as infile:
         lines = infile.readlines()
 
+    # ---- Evaluate each line ----
     results = []
     for line in lines:
         raw = line.rstrip('\n')
@@ -218,9 +224,14 @@ def process_file(input_path, output_path):
         except Exception as e:
             results.append(f"ERROR: {e}")
 
-    with open(output_path, 'w', encoding='utf-8') as outfile:
+    # ---- Write to a temporary file first ----
+    tmp_path = output_path + '.tmp'
+    with open(tmp_path, 'w', encoding='utf-8') as outfile:
         for line in results:
             outfile.write(line + '\n')
+
+    # ---- Replace the destination atomically ----
+    os.replace(tmp_path, output_path)
 
 
 # ===============================================================
@@ -240,7 +251,7 @@ def main():
 
 
 # ===============================================================
-# MANUAL TESTS
+# MANUAL TESTS  (run with: py src\main.py)
 # ===============================================================
 if __name__ == "__main__":
     print("=== Stack ===")

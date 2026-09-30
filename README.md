@@ -1,12 +1,11 @@
 # Math Expression Evaluator
 
-A Python program that reads mathematical expressions from `data/input.txt`, evaluates each using a **stack-based approach**, and writes the results to `data/output.txt`.
+**A Python program that evaluates mathematical expressions using a stack-based approach.**
 
-**Course:** DCOMP320 — Data Structures and Algorithms  
-**Student:** Joshua Mohamed Katibi Yaffa (ID: 905004075)  
-**Semester:** 5, Year 3  
-**Institution:** Limkokwing University of Creative Technology — Sierra Leone  
-**Submission Date:** 09 / 10 / 2026
+DCOMP320 — Data Structures and Algorithms  
+Joshua Mohamed Katibi Yaffa — Student ID 905004075  
+Limkokwing University of Creative Technology — Sierra Leone  
+Submission Date: 09 / 10 / 2026
 
 ---
 
@@ -28,10 +27,16 @@ A Python program that reads mathematical expressions from `data/input.txt`, eval
 
 ## Requirements
 
-- **Python 3.8+** (tested on Python 3.14.6)
-- No external packages — uses only the Python standard library
+**What this section explains:** The exact environment needed to run this project.
 
-Verify Python is installed:
+To run the program you need:
+
+- **Python 3.8 or newer** — tested on Python 3.14.6
+- **No external packages** — everything is written with the Python Standard Library (`os`, `sys`, `unittest`)
+
+**Why no external packages?** This assignment is about **data structures and algorithms**. The whole point is to demonstrate a hand-written **Stack** and a hand-written **expression parser**. Using a library like `sympy` or Python's built-in `eval()` would defeat the purpose.
+
+**Verify Python is installed:**
 
 ```bash
 py --version

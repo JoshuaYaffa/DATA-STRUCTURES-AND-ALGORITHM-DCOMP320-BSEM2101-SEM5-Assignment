@@ -48,7 +48,7 @@ class TestStack(unittest.TestCase):
         s.push(10)
         s.push(20)
         self.assertEqual(s.peek(), 20)
-        self.assertEqual(s.size(), 2)
+        self.assertEqual(s.size(), 2)  # unchanged
 
     def test_pop_returns_last_in_first_out(self):
         s = Stack()
@@ -163,6 +163,7 @@ class TestEvalPostfix(unittest.TestCase):
         self.assertEqual(eval_postfix(["3", "5", "2", "*", "+"]), 13)
 
     def test_subtraction_order(self):
+        # 10 - 2 = 8  (order matters!)
         self.assertEqual(eval_postfix(["10", "2", "-"]), 8)
 
     def test_division(self):
@@ -193,6 +194,7 @@ class TestEvaluateEndToEnd(unittest.TestCase):
         self.assertEqual(evaluate("((2 + 3) * (4 + 1))"), 25)
 
     def test_left_to_right_same_precedence(self):
+        # 10 - 3 - 2 = 5  (left associativity)
         self.assertEqual(evaluate("10 - 3 - 2"), 5)
 
     def test_large_numbers(self):
@@ -205,6 +207,37 @@ class TestEvaluateEndToEnd(unittest.TestCase):
     def test_bad_character_raises(self):
         with self.assertRaises(ValueError):
             evaluate("3 + $")
+
+    # -----------------------------------------------------------
+    # Extended coverage — matches the 20-line extended input.txt
+    # -----------------------------------------------------------
+    def test_extended_input_examples(self):
+        """Verify all 20 expressions from the extended input sample."""
+        cases = [
+            ("3 + 5 * 2", 13),
+            ("(8 / 4) + 7 * 2", 16),   # assignment says 17 — see report
+            ("10 - (2 + 3) * 4", -10),
+            ("100 - 50 / 5", 90),
+            ("((2 + 3) * (4 + 1))", 25),
+            ("7 * 8 + 2 - 10", 48),
+            ("20 / 4 / 5", 1),
+            ("2 + 3 * 4 - 6 / 2", 11),
+            ("(1 + 2) * (3 + 4) * (5 + 6)", 231),
+            ("1000 + 2000 * 3", 7000),
+            ("50 - (10 - 5) - 3", 42),
+            ("9 * 9 + 9 - 9 / 9", 89),
+            ("(100 / 10) + (200 / 20)", 20),
+            ("7 + 7 * 7 - 7", 49),
+            ("18 / 3 + 4 * 2 - 1", 13),
+            ("((10 - 5) * (20 / 4)) + 7", 32),
+            ("144 / 12 / 3 + 8 * 2", 20),
+            ("500 - (100 + 200) / 5", 440),
+            ("(9 + 11) * (7 - 4) - (6 / 2)", 57),
+            ("10000 / 100 + 50 * 4 - 30", 270),
+        ]
+        for expr, expected in cases:
+            with self.subTest(expr=expr):
+                self.assertEqual(evaluate(expr), expected)
 
 
 if __name__ == "__main__":
